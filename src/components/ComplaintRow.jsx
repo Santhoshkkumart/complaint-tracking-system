@@ -1,4 +1,12 @@
 function ComplaintRow({ complaint, onStatusChange, onSelect, onDelete }) {
+  const getCreatedAtDate = () => {
+    if (!complaint.createdAt) return "—";
+    if (complaint.createdAt.toDate) {
+      return complaint.createdAt.toDate().toLocaleDateString();
+    }
+    return new Date(complaint.createdAt).toLocaleDateString();
+  };
+
   return (
     <tr className="border-b border-white/10 hover:bg-white/5 transition">
 
@@ -27,9 +35,7 @@ function ComplaintRow({ complaint, onStatusChange, onSelect, onDelete }) {
   </td>
 
   <td className="px-6 py-4 text-slate-400">
-    {complaint.createdAt
-      ? new Date(complaint.createdAt).toLocaleDateString()
-      : "—"}
+    {getCreatedAtDate()}
   </td>
 
   <td className="px-6 py-4 flex gap-2">

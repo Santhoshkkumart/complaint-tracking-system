@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { db } from "../services/firebase";
-import { collection, addDoc, getDocs, updateDoc, doc } from "firebase/firestore";
+import { collection, addDoc, getDocs, updateDoc, doc, serverTimestamp } from "firebase/firestore";
 import { deleteDoc } from "firebase/firestore";
 
 import { motion } from "framer-motion";
@@ -20,7 +20,6 @@ function Dashboard() {
   const [statusFilter, setStatusFilter] = useState("all");
   const [search, setSearch] = useState("");
 
-  // 🔥 FETCH FROM FIREBASE
   const fetchComplaints = async () => {
     try {
       const querySnapshot = await getDocs(collection(db, "complaints"));
@@ -38,10 +37,14 @@ function Dashboard() {
     fetchComplaints();
   }, []);
 
-  // 🔥 ADD COMPLAINT
   const handleAdd = async (complaint) => {
     try {
-      await addDoc(collection(db, "complaints"), complaint);
+      await addDoc(collection(db, "complaints"), {
+        ...complaint,
+        status: "open",
+        createdAt: serverTimestamp(),
+        submittedBy: "admin",
+      });
       fetchComplaints();
     } catch (err) {
       console.log(err);
@@ -49,7 +52,6 @@ function Dashboard() {
     }
   };
 
-  // 🔥 UPDATE STATUS
   const handleStatusChange = async (id, status) => {
     try {
       const ref = doc(db, "complaints", id);
@@ -70,16 +72,15 @@ function Dashboard() {
   };
 
 
-  // 🔥 FILTER + SEARCH
   const filtered = complaints.filter((c) => {
     const matchesStatus = statusFilter === "all" || c.status === statusFilter;
     const matchesSearch =
       c.title?.toLowerCase().includes(search.toLowerCase()) ||
-      c.submittedBy?.toLowerCase().includes(search.toLowerCase());
+      c.submittedBy?.toLowerCase().includes(search.toLowerCase()) ||
+      c.userEmail?.toLowerCase().includes(search.toLowerCase());
     return matchesStatus && matchesSearch;
   });
 
-  // 🔥 STATS
   const stats = {
     open: complaints.filter((c) => c.status === "open").length,
     inProgress: complaints.filter((c) => c.status === "in_progress").length,
@@ -90,9 +91,8 @@ function Dashboard() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-[#0f172a] via-[#020617] to-black text-white">
 
-  {/* TOP HEADER */}
   <header className="border-b border-white/10 bg-white/5 backdrop-blur-xl sticky top-0 z-50">
-    <div className="mx-auto max-w-7xl px-6 py-4 flex items-center justify-between">
+    <div className="mx-auto max-w-7xl px-4 sm:px-6 py-4 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
 
       <div className="flex items-center gap-4">
         <div className="rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 p-3 shadow-lg">
@@ -109,7 +109,7 @@ function Dashboard() {
         </div>
       </div>
 
-      <div className="flex items-center gap-4">
+      <div className="flex items-center gap-4 justify-between sm:justify-end w-full sm:w-auto">
         <div className="text-right">
           <p className="text-sm text-slate-300">Admin Panel</p>
           <p className="text-xs text-slate-500">System Active 🟢</p>
@@ -122,9 +122,8 @@ function Dashboard() {
   </header>
 
 
-  <main className="mx-auto max-w-7xl px-6 py-10 space-y-8">
+  <main className="mx-auto max-w-7xl px-4 sm:px-6 py-8 sm:py-10 space-y-8">
 
-    {/* STATS CARDS */}
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
 
       <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl p-6 hover:scale-105 transition shadow-lg">
@@ -150,7 +149,6 @@ function Dashboard() {
     </div>
 
 
-    {/* FILTER + SEARCH */}
     <div className="flex flex-col md:flex-row gap-4 md:items-center md:justify-between">
 
       <Tabs value={statusFilter} onValueChange={setStatusFilter}>
@@ -176,7 +174,6 @@ function Dashboard() {
     </div>
 
 
-    {/* TABLE */}
     <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl shadow-xl overflow-hidden">
 
       <div className="overflow-x-auto">
@@ -219,7 +216,6 @@ function Dashboard() {
   </main>
 
 
-  {/* SIDE DETAIL PANEL */}
   <ComplaintDetail
     complaint={selectedComplaint}
     open={!!selectedComplaint}
