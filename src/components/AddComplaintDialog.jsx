@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { createPortal } from "react-dom";
 
 function AddComplaintDialog({ onAdd }) {
   const [open, setOpen] = useState(false);
@@ -35,23 +36,25 @@ function AddComplaintDialog({ onAdd }) {
     <>
       <button
         onClick={() => setOpen(true)}
-        className="bg-cyan-500 hover:bg-cyan-600 px-4 py-2 rounded-lg font-semibold"
+        className="bg-cyan-500 hover:bg-cyan-600 px-4 py-2 rounded-lg font-semibold text-white"
       >
         + Add Complaint
       </button>
 
-      {open && (
-        <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50 p-4">
-          <div className="bg-[#020617] border border-white/10 rounded-2xl w-full max-w-lg p-6 shadow-xl max-h-[90vh] overflow-y-auto">
+      {open && createPortal(
+        <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-[9999] p-4 backdrop-blur-sm">
+          <div className="bg-[#020617] border border-white/10 rounded-2xl w-full max-w-lg p-6 shadow-xl max-h-[90vh] overflow-y-auto text-white">
+            
             <h2 className="text-xl font-bold mb-4 text-cyan-400">
               Submit Complaint
             </h2>
 
             <form onSubmit={handleSubmit} className="space-y-4">
+              {/* Added text-white to inputs so text is visible on black bg */}
               <input
                 type="text"
                 placeholder="Complaint title"
-                className="w-full p-3 rounded bg-black border border-white/20"
+                className="w-full p-3 rounded bg-black border border-white/20 text-white placeholder-gray-500 focus:outline-none focus:border-cyan-500 transition-colors"
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
               />
@@ -59,21 +62,21 @@ function AddComplaintDialog({ onAdd }) {
               <input
                 type="text"
                 placeholder="Category (Hostel, Bus, Food...)"
-                className="w-full p-3 rounded bg-black border border-white/20"
+                className="w-full p-3 rounded bg-black border border-white/20 text-white placeholder-gray-500 focus:outline-none focus:border-cyan-500 transition-colors"
                 value={category}
                 onChange={(e) => setCategory(e.target.value)}
               />
 
               <textarea
                 placeholder="Describe your issue..."
-                className="w-full p-3 rounded bg-black border border-white/20"
+                className="w-full p-3 rounded bg-black border border-white/20 text-white placeholder-gray-500 focus:outline-none focus:border-cyan-500 transition-colors"
                 rows={4}
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
               />
 
               <select
-                className="w-full p-3 rounded bg-black border border-white/20"
+                className="w-full p-3 rounded bg-black border border-white/20 text-white focus:outline-none focus:border-cyan-500 transition-colors"
                 value={priority}
                 onChange={(e) => setPriority(e.target.value)}
               >
@@ -86,22 +89,22 @@ function AddComplaintDialog({ onAdd }) {
                 <button
                   type="button"
                   onClick={() => setOpen(false)}
-                  className="px-4 py-2 rounded bg-gray-600"
+                  className="px-4 py-2 rounded bg-gray-700 hover:bg-gray-600 text-white transition-colors"
                 >
                   Cancel
                 </button>
 
                 <button
                   type="submit"
-                  className="px-4 py-2 rounded bg-cyan-500 hover:bg-cyan-600 font-semibold"
+                  className="px-4 py-2 rounded bg-cyan-500 hover:bg-cyan-600 font-semibold text-white transition-colors"
                 >
                   Submit
                 </button>
               </div>
-
             </form>
           </div>
-        </div>
+        </div>,
+        document.body
       )}
     </>
   );
