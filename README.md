@@ -1,16 +1,155 @@
-# React + Vite
+# 🚀 ResolveX – Smart Complaint Management System
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A modern web-based complaint management system that allows users to submit, track, and manage complaints efficiently. Built using React, Tailwind CSS, and Firebase, this platform provides a seamless and real-time experience for both users and administrators.
 
-Currently, two official plugins are available:
+## 📌 Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- 📝 Submit complaints with detailed description
+- 📂 Track complaint status in real-time
+- 🔐 User authentication (Firebase Auth)
+- ☁️ Cloud database (Firebase Firestore)
+- 🎨 Modern responsive UI with Tailwind CSS
+- 📊 Admin dashboard for managing complaints
+- 🚀 CI/CD enabled with GitHub Actions
+- 🌍 Live deployment using Firebase Hosting
 
-## React Compiler
+## 🛠️ Tech Stack
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+### Frontend:
+- React.js (Vite)
+- Tailwind CSS
 
-## Expanding the ESLint configuration
+### Backend & Database:
+- Firebase Authentication
+- Firebase Firestore
+- Firebase Hosting
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+### Tools & Deployment:
+- Git & GitHub
+- GitHub Actions (CI/CD)
+- Firebase Hosting
+
+## 📸 Project Preview
+
+> Add screenshots here after UI completion
+
+```
+📱 Homepage
+📊 Complaint Dashboard
+⚙️ Admin Panel
+```
+
+## ⚙️ Installation & Setup
+
+### 1️⃣ Clone repository
+
+```bash
+git clone https://github.com/yourusername/resolvex.git
+cd resolvex
+```
+
+### 2️⃣ Install dependencies
+
+```bash
+npm install
+```
+
+### 3️⃣ Run development server
+
+```bash
+npm run dev
+```
+
+Project will run on: **http://localhost:5173**
+
+## 🔥 Firebase Setup
+
+1. Create a project in [Firebase Console](https://console.firebase.google.com/)
+2. Enable Authentication (Email/Password)
+3. Create Firestore Database
+4. Add Firebase config in your project
+
+### Example Configuration:
+
+```javascript
+const firebaseConfig = {
+  apiKey: "YOUR_KEY",
+  authDomain: "YOUR_DOMAIN",
+  projectId: "YOUR_PROJECT_ID",
+  storageBucket: "YOUR_BUCKET",
+  messagingSenderId: "YOUR_ID",
+  appId: "YOUR_APP_ID"
+};
+```
+
+> ⚠️ **Important:** Never commit your Firebase config with actual credentials to GitHub. Use environment variables instead.
+
+## 🚀 Deployment (Firebase Hosting)
+
+### Build project:
+
+```bash
+npm run build
+```
+
+### Deploy:
+
+```bash
+firebase deploy
+```
+
+## 🤖 CI/CD Pipeline
+
+This project uses **GitHub Actions** for automatic deployment.
+
+Whenever code is pushed to GitHub:
+- ✅ Project builds automatically
+- ✅ Deploys to Firebase hosting
+- ✅ Live site updates instantly
+
+## 🎯 Future Enhancements
+
+- [ ] Admin analytics dashboard
+- [ ] AI chatbot for complaint assistance
+- [ ] Email/SMS notifications
+- [ ] Role-based access control
+- [ ] Mobile responsive optimization
+
+## 📂 Project Structure
+
+```
+resolvex/
+├── public/
+├── src/
+│   ├── components/
+│   ├── pages/
+│   ├── services/
+│   ├── App.jsx
+│   └── main.jsx
+├── .github/
+│   └── workflows/
+├── firebase.json
+├── package.json
+└── README.md
+```
+
+## 🤝 Contributing
+
+Contributions, issues, and feature requests are welcome! Feel free to check the [issues page](https://github.com/yourusername/resolvex/issues).
+
+## 📝 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## 👨‍💻 Author
+
+**Santhoshkkumar**  
+*Aspiring Full Stack Developer*
+
+- GitHub: [@yourusername](https://github.com/yourusername)
+- LinkedIn: [Your LinkedIn](https://linkedin.com/in/yourprofile)
+
+---
+
+⭐ **If you found this project helpful, please give it a star!**
+
