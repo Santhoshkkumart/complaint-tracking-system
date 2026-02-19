@@ -1,6 +1,12 @@
 import { useState } from "react";
 import { createPortal } from "react-dom";
 
+const TITLE_MAX_CHARS = 80;
+const DESCRIPTION_MAX_WORDS = 200;
+
+const getWordCount = (text: string) =>
+  text.trim() ? text.trim().split(/\s+/).length : 0;
+
 function AddComplaintDialog({ onAdd }) {
   const [open, setOpen] = useState(false);
 
@@ -9,11 +15,15 @@ function AddComplaintDialog({ onAdd }) {
   const [description, setDescription] = useState("");
   const [priority, setPriority] = useState("low");
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     if (!title || !category || !description) {
       alert("Please fill all fields");
+      return;
+    }
+    if (getWordCount(description) > DESCRIPTION_MAX_WORDS) {
+      alert(`Description must be ${DESCRIPTION_MAX_WORDS} words or less.`);
       return;
     }
 
@@ -56,8 +66,12 @@ function AddComplaintDialog({ onAdd }) {
                 placeholder="Complaint title"
                 className="w-full p-3 rounded bg-black border border-white/20 text-white placeholder-gray-500 focus:outline-none focus:border-cyan-500 transition-colors"
                 value={title}
+                maxLength={TITLE_MAX_CHARS}
                 onChange={(e) => setTitle(e.target.value)}
               />
+              <p className="text-xs text-slate-400 text-right">
+                {title.length}/{TITLE_MAX_CHARS} characters
+              </p>
 
               <input
                 type="text"
@@ -72,8 +86,16 @@ function AddComplaintDialog({ onAdd }) {
                 className="w-full p-3 rounded bg-black border border-white/20 text-white placeholder-gray-500 focus:outline-none focus:border-cyan-500 transition-colors"
                 rows={4}
                 value={description}
-                onChange={(e) => setDescription(e.target.value)}
+                onChange={(e) => {
+                  const nextValue = e.target.value;
+                  if (getWordCount(nextValue) <= DESCRIPTION_MAX_WORDS) {
+                    setDescription(nextValue);
+                  }
+                }}
               />
+              <p className="text-xs text-slate-400 text-right">
+                {getWordCount(description)}/{DESCRIPTION_MAX_WORDS} words
+              </p>
 
               <select
                 className="w-full p-3 rounded bg-black border border-white/20 text-white focus:outline-none focus:border-cyan-500 transition-colors"

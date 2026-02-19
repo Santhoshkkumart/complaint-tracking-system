@@ -124,8 +124,8 @@ resolvex/
 │   ├── components/
 │   ├── pages/
 │   ├── services/
-│   ├── App.jsx
-│   └── main.jsx
+│   ├── App.tsx
+│   └── main.tsx
 ├── .github/
 │   └── workflows/
 ├── firebase.json
@@ -152,4 +152,3 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ---
 
 ⭐ **If you found this project helpful, please give it a star!**
-

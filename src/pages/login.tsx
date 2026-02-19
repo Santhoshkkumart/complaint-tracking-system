@@ -7,6 +7,11 @@ import {
 import { useNavigate } from "react-router-dom";
 import RocketModel from "../components/RocketModel";
 
+const sanitizeEmailInput = (value: string) =>
+  value.replace(/[^a-zA-Z0-9@._-]/g, "").toLowerCase();
+const EMAIL_MAX_CHARS = 254;
+const PASSWORD_MAX_CHARS = 64;
+
 function Login() {
   const [role, setRole] = useState("user");
   const [isSignup, setIsSignup] = useState(false);
@@ -14,9 +19,9 @@ function Login() {
   const [password, setPassword] = useState("");
 
   const navigate = useNavigate();
-  const ADMIN_EMAILS = ["santhoshkkumar@gmail.com"];
+  const ADMIN_EMAILS = ["santhoshkkumarsan@gmail.com"];
 
-  const handleAuth = async (e) => {
+  const handleAuth = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     try {
@@ -41,7 +46,7 @@ function Login() {
           navigate("/user-dashboard");
         }
       }
-    } catch (err) {
+    } catch (err: any) {
       alert(err.message);
       console.log(err);
     }
@@ -89,7 +94,13 @@ function Login() {
               placeholder="admin@complainttrack.com"
               className="w-full mt-1 p-3 rounded-lg bg-[#020617] border border-white/10 focus:border-cyan-500 outline-none"
               value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              maxLength={EMAIL_MAX_CHARS}
+              onKeyDown={(e) => {
+                if (e.key === " ") {
+                  e.preventDefault();
+                }
+              }}
+              onChange={(e) => setEmail(sanitizeEmailInput(e.target.value))}
             />
           </div>
 
@@ -100,6 +111,7 @@ function Login() {
               placeholder="••••••••"
               className="w-full mt-1 p-3 rounded-lg bg-[#020617] border border-white/10 focus:border-cyan-500 outline-none"
               value={password}
+              maxLength={PASSWORD_MAX_CHARS}
               onChange={(e) => setPassword(e.target.value)}
             />
           </div>
