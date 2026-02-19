@@ -1,10 +1,11 @@
-import { useState } from "react";
+﻿import { useState } from "react";
 import { auth } from "../services/firebase";
 import {
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword
 } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
+import { Eye, EyeOff } from "lucide-react";
 import RocketModel from "../components/RocketModel";
 
 const sanitizeEmailInput = (value: string) =>
@@ -17,6 +18,7 @@ function Login() {
   const [isSignup, setIsSignup] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
 
   const navigate = useNavigate();
   const ADMIN_EMAILS = ["santhoshkkumarsan@gmail.com"];
@@ -106,22 +108,27 @@ function Login() {
 
           <div>
             <label className="text-sm text-slate-400">Password</label>
-            <input
-              type="password"
-              placeholder="••••••••"
-              className="w-full mt-1 p-3 rounded-lg bg-[#020617] border border-white/10 focus:border-cyan-500 outline-none"
-              value={password}
-              maxLength={PASSWORD_MAX_CHARS}
-              onChange={(e) => setPassword(e.target.value)}
-            />
+            <div className="relative mt-1">
+              <input
+                type={showPassword ? "text" : "password"}
+                placeholder="••••••••"
+                className="w-full p-3 pr-11 rounded-lg bg-[#020617] border border-white/10 focus:border-cyan-500 outline-none"
+                value={password}
+                maxLength={PASSWORD_MAX_CHARS}
+                onChange={(e) => setPassword(e.target.value)}
+              />
+              <button
+                type="button"
+                aria-label={showPassword ? "Hide password" : "Show password"}
+                onClick={() => setShowPassword((prev) => !prev)}
+                className="absolute inset-y-0 right-0 px-3 text-slate-400 hover:text-cyan-400"
+              >
+                {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+              </button>
+            </div>
           </div>
 
-          <div className="flex justify-between items-center text-sm mt-2">
-            <label className="flex items-center gap-2 text-slate-400">
-              <input type="checkbox" />
-              Remember me
-            </label>
-
+          <div className="flex justify-end items-center text-sm mt-2">
             <span className="text-orange-400 cursor-pointer">
               Forgot password?
             </span>

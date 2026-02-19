@@ -13,7 +13,6 @@ import { onAuthStateChanged, signOut } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
 import AddComplaintDialog from "../components/AddComplaintDialog";
 import EditComplaintDialog from "../components/EditComplaintDialog";
-import { sendComplaintMail } from "../services/mailer";
 
 type Complaint = {
   id: string;
@@ -87,17 +86,7 @@ function UserDashboard() {
         createdAt: new Date(),
       };
 
-      const newDoc = await addDoc(collection(db, "complaints"), payload);
-      sendComplaintMail({
-        event: "complaint_created",
-        complaintId: newDoc.id,
-        title: payload.title,
-        category: payload.category,
-        priority: payload.priority,
-        status: payload.status,
-        submittedBy: payload.submittedBy || undefined,
-        userEmail: payload.userEmail || undefined,
-      });
+      await addDoc(collection(db, "complaints"), payload);
 
       fetchUserComplaints(user.uid);
     } catch (err) {

@@ -2,7 +2,6 @@ import { useEffect, useRef, useState } from "react";
 import { db } from "../services/firebase";
 import { collection, addDoc, getDocs, updateDoc, doc, serverTimestamp } from "firebase/firestore";
 import { deleteDoc } from "firebase/firestore";
-import { sendComplaintMail } from "../services/mailer";
 
 import { motion } from "framer-motion";
 import { Search, AlertCircle, Clock, CheckCircle2, Archive, BarChart3 } from "lucide-react";
@@ -47,16 +46,7 @@ function Dashboard() {
         createdAt: serverTimestamp(),
         submittedBy: "admin",
       };
-      const newDoc = await addDoc(collection(db, "complaints"), payload);
-      sendComplaintMail({
-        event: "complaint_created",
-        complaintId: newDoc.id,
-        title: payload.title,
-        category: payload.category,
-        priority: payload.priority,
-        status: payload.status,
-        submittedBy: payload.submittedBy,
-      });
+      await addDoc(collection(db, "complaints"), payload);
       fetchComplaints();
     } catch (err) {
       console.log(err);
@@ -68,16 +58,6 @@ function Dashboard() {
     try {
       const ref = doc(db, "complaints", id);
       await updateDoc(ref, { status });
-      const complaint = complaints.find((c: any) => c.id === id);
-      sendComplaintMail({
-        event: "complaint_status_updated",
-        complaintId: id,
-        title: complaint?.title,
-        category: complaint?.category,
-        priority: complaint?.priority,
-        status,
-        submittedBy: complaint?.submittedBy || complaint?.userEmail,
-      });
       fetchComplaints();
     } catch (err) {
       console.log(err);
@@ -86,17 +66,7 @@ function Dashboard() {
 
   const handleDelete = async (id) => {
     try {
-      const complaint = complaints.find((c: any) => c.id === id);
       await deleteDoc(doc(db, "complaints", id));
-      sendComplaintMail({
-        event: "complaint_deleted",
-        complaintId: id,
-        title: complaint?.title,
-        category: complaint?.category,
-        priority: complaint?.priority,
-        status: complaint?.status,
-        submittedBy: complaint?.submittedBy || complaint?.userEmail,
-      });
       fetchComplaints();
     } catch (err) {
       console.log(err);
