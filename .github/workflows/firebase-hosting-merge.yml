@@ -16,8 +16,12 @@ jobs:
       - name: Install dependencies
         run: npm install
 
+      # 🔥 DEBUG + BUILD WITH ENV VARIABLES
       - name: Build project
-        run: npm run build
+        run: |
+          echo "Checking if env exists..."
+          echo "API KEY = $VITE_FIREBASE_API_KEY"
+          npm run build
         env:
           VITE_FIREBASE_API_KEY: ${{ vars.VITE_FIREBASE_API_KEY }}
           VITE_FIREBASE_AUTH_DOMAIN: ${{ vars.VITE_FIREBASE_AUTH_DOMAIN }}
