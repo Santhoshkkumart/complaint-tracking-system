@@ -1,0 +1,10 @@
+React
+React DOM
+Vite
+Firebase
+Tailwind CSS
+Framer Motion
+React Router DOM
+Three.js
+@react-three/fiber
+@react-three/drei

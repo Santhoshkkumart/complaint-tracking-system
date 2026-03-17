@@ -1,0 +1,10 @@
+version: '3.8'
+
+services:
+  resolvex:
+    build: .
+    image: resolvex-prod:latest
+    container_name: resolvex-app
+    ports:
+      - "8080:80"
+    restart: always
