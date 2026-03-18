@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { FirebaseError } from "firebase/app";
 import {
   collection,
   onSnapshot,
@@ -29,6 +30,33 @@ export interface Complaint {
 
 export type ComplaintInput = Omit<Complaint, "id" | "status" | "createdAt" | "userId" | "userEmail">;
 
+const getComplaintTime = (createdAt: Complaint["createdAt"]) => {
+  if (!createdAt) return 0;
+  if (typeof createdAt?.toMillis === "function") return createdAt.toMillis();
+
+  const date = new Date(createdAt);
+  return Number.isNaN(date.getTime()) ? 0 : date.getTime();
+};
+
+const sortComplaintsByNewest = (items: Complaint[]) =>
+  [...items].sort((a, b) => getComplaintTime(b.createdAt) - getComplaintTime(a.createdAt));
+
+const formatFirestoreError = (err: unknown, fallbackMessage: string) => {
+  if (err instanceof FirebaseError) {
+    if (err.code === "permission-denied") {
+      return "Firestore denied this request. Check your Firestore rules for complaint writes.";
+    }
+
+    if (err.code === "failed-precondition") {
+      return "Firestore query needs configuration. Complaint data will load once the required index is removed or deployed.";
+    }
+
+    return `${fallbackMessage} (${err.code})`;
+  }
+
+  return fallbackMessage;
+};
+
 export const useComplaints = (userId?: string | null, fetchAll = false) => {
   const [complaints, setComplaints] = useState<Complaint[]>([]);
   const [loading, setLoading] = useState(true);
@@ -46,11 +74,7 @@ export const useComplaints = (userId?: string | null, fetchAll = false) => {
     if (fetchAll) {
       q = query(collection(db, "complaints"), orderBy("createdAt", "desc"));
     } else {
-      q = query(
-        collection(db, "complaints"),
-        where("userId", "==", userId),
-        orderBy("createdAt", "desc")
-      );
+      q = query(collection(db, "complaints"), where("userId", "==", userId));
     }
 
     const unsubscribe = onSnapshot(
@@ -60,12 +84,13 @@ export const useComplaints = (userId?: string | null, fetchAll = false) => {
           id: doc.id,
           ...doc.data(),
         })) as Complaint[];
-        setComplaints(list);
+        setComplaints(sortComplaintsByNewest(list));
         setLoading(false);
+        setError(null);
       },
       (err) => {
         console.error("Error fetching complaints:", err);
-        setError("Failed to fetch complaints");
+        setError(formatFirestoreError(err, "Failed to fetch complaints"));
         setLoading(false);
       }
     );
@@ -100,7 +125,7 @@ export const useComplaints = (userId?: string | null, fetchAll = false) => {
       }
     } catch (err) {
       console.error("Error adding complaint:", err);
-      throw err;
+      throw new Error(formatFirestoreError(err, "Failed to add complaint"));
     }
   };
 
@@ -110,7 +135,7 @@ export const useComplaints = (userId?: string | null, fetchAll = false) => {
       await updateDoc(ref, { status });
     } catch (err) {
       console.error("Error updating complaint status:", err);
-      throw err;
+      throw new Error(formatFirestoreError(err, "Failed to update complaint status"));
     }
   };
 
@@ -120,7 +145,7 @@ export const useComplaints = (userId?: string | null, fetchAll = false) => {
       await updateDoc(ref, data);
     } catch (err) {
       console.error("Error updating complaint:", err);
-      throw err;
+      throw new Error(formatFirestoreError(err, "Failed to update complaint"));
     }
   };
 
@@ -129,7 +154,7 @@ export const useComplaints = (userId?: string | null, fetchAll = false) => {
       await deleteDoc(doc(db, "complaints", id));
     } catch (err) {
       console.error("Error deleting complaint:", err);
-      throw err;
+      throw new Error(formatFirestoreError(err, "Failed to delete complaint"));
     }
   };
 

@@ -57,9 +57,9 @@ function AddComplaintDialog({ onAdd }: { onAdd: (data: any) => Promise<void> | v
       setMobile("");
 
       setOpen(false);
-    } catch (err) {
+    } catch (err: any) {
       console.error(err);
-      alert("Failed to submit complaint. Please try again.");
+      alert(err?.message || "Failed to submit complaint. Please try again.");
     } finally {
       setSubmitting(false);
     }
@@ -78,7 +78,7 @@ function AddComplaintDialog({ onAdd }: { onAdd: (data: any) => Promise<void> | v
           e.stopPropagation();
           openDialog();
         }}
-        className="relative z-[50] flex items-center gap-1.5 bg-gradient-to-r from-purple-500 to-indigo-600 hover:from-purple-600 hover:to-indigo-700 px-3 py-1.5 rounded-lg font-bold text-white transition-all transform hover:scale-105 active:scale-95 shadow-lg shadow-purple-500/20 text-xs"
+        className="relative z-[50] inline-flex min-h-10 items-center justify-center gap-2 rounded-lg bg-gradient-to-r from-purple-500 to-indigo-600 px-4 py-2 text-xs font-bold text-white shadow-lg shadow-purple-500/20 transition-all hover:from-purple-600 hover:to-indigo-700 hover:scale-105 active:scale-95"
         aria-label="Open complaint form"
       >
         <MessageSquare size={14} />
@@ -140,6 +140,7 @@ function AddComplaintDialog({ onAdd }: { onAdd: (data: any) => Promise<void> | v
                       <input
                         type="text"
                         placeholder="Hostel, Food, etc."
+                        maxLength={30}
                         className="w-full p-2.5 sm:p-3 rounded-xl bg-[#020617] border border-white/10 text-white placeholder-slate-600 focus:outline-none focus:border-purple-500 transition-all focus:ring-1 focus:ring-purple-500/50 text-sm sm:text-base"
                         value={category}
                         onChange={(e) => setCategory(e.target.value)}
@@ -204,7 +205,7 @@ function AddComplaintDialog({ onAdd }: { onAdd: (data: any) => Promise<void> | v
                     </div>
                   </div>
 
-                  <div className="flex gap-3 pt-4 border-t border-white/5">
+                  <div className="flex gap-3 pt-2 border-t border-white/5">
                     <button
                       type="button"
                       onClick={() => setOpen(false)}
@@ -218,7 +219,7 @@ function AddComplaintDialog({ onAdd }: { onAdd: (data: any) => Promise<void> | v
                       disabled={submitting}
                       className="flex-1 py-2.5 sm:py-3 rounded-xl bg-gradient-to-r from-purple-500 to-indigo-600 hover:from-purple-600 hover:to-indigo-700 font-bold text-white transition-all shadow-lg shadow-purple-500/20 flex items-center justify-center gap-2 text-sm sm:text-base disabled:opacity-60 disabled:cursor-not-allowed"
                     >
-                      <Send size={16} className="sm:size-18" />
+                      <Send size={16} className="sm:size-6" />
                       {submitting ? "Submitting..." : "Submit"}
                     </button>
                   </div>

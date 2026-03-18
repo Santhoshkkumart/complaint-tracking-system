@@ -24,13 +24,16 @@ export const Button04 = ({ text = "Nothing-Plop", onClick, isActive, className =
           
           display: inline-flex;
           align-items: center;
-          padding: 0.5rem 1.25rem;
+          justify-content: center;
+          min-height: 2.5rem;
+          padding: 0.625rem 1rem;
           border-radius: 9999px;
           background: rgba(255, 255, 255, 0.05);
           border: 1px solid rgba(255, 255, 255, 0.1);
           color: #94a3b8;
           font-weight: 600;
-          font-size: 0.875rem;
+          font-size: 0.8125rem;
+          line-height: 1;
           transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
           position: relative;
           overflow: hidden;
@@ -55,7 +58,7 @@ export const Button04 = ({ text = "Nothing-Plop", onClick, isActive, className =
         .button04_inner {
           display: flex;
           align-items: center;
-          gap: 0.75rem;
+          gap: 0.625rem;
           z-index: 1;
         }
 
