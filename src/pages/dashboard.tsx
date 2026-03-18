@@ -18,7 +18,7 @@ import { Input } from "@/components/ui/input";
 function Dashboard() {
   const { user } = useAuth();
   const navigate = useNavigate();
-  const { complaints, loading, addComplaint, updateComplaintStatus, deleteComplaint } = useComplaints();
+  const { complaints, loading, addComplaint, updateComplaintStatus, deleteComplaint } = useComplaints(user?.uid, true);
   
   const [selectedComplaint, setSelectedComplaint] = useState(null);
   const [statusFilter, setStatusFilter] = useState("all");

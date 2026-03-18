@@ -29,15 +29,23 @@ export interface Complaint {
 
 export type ComplaintInput = Omit<Complaint, "id" | "status" | "createdAt" | "userId" | "userEmail">;
 
-export const useComplaints = (userId?: string) => {
+export const useComplaints = (userId?: string | null, fetchAll = false) => {
   const [complaints, setComplaints] = useState<Complaint[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    let q = query(collection(db, "complaints"), orderBy("createdAt", "desc"));
+    if (!fetchAll && !userId) {
+      setComplaints([]);
+      setLoading(false);
+      setError(null);
+      return;
+    }
 
-    if (userId) {
+    let q;
+    if (fetchAll) {
+      q = query(collection(db, "complaints"), orderBy("createdAt", "desc"));
+    } else {
       q = query(
         collection(db, "complaints"),
         where("userId", "==", userId),
@@ -63,7 +71,7 @@ export const useComplaints = (userId?: string) => {
     );
 
     return () => unsubscribe();
-  }, [userId]);
+  }, [userId, fetchAll]);
 
   const addComplaint = async (input: ComplaintInput, user: { uid: string; email: string }) => {
     try {
