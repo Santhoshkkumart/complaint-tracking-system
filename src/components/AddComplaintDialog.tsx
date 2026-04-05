@@ -88,147 +88,178 @@ function AddComplaintDialog({ onAdd }: { onAdd: (data: any) => Promise<void> | v
       {createPortal(
         <AnimatePresence>
           {open && (
-            <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-[9999] p-4 backdrop-blur-md">
-              <motion.div 
+            <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/70 p-4 backdrop-blur-md">
+              <motion.div
                 key="add-complaint-dialog"
                 initial={{ opacity: 0, scale: 0.9, y: 20 }}
                 animate={{ opacity: 1, scale: 1, y: 0 }}
                 exit={{ opacity: 0, scale: 0.9, y: 20 }}
-                className="bg-[#0b1220] border border-white/10 rounded-2xl w-full max-w-md shadow-2xl overflow-hidden text-white"
+                className="w-full max-w-5xl overflow-hidden rounded-[2rem] border border-stone-300/70 bg-[linear-gradient(180deg,rgba(255,248,240,0.98)_0%,rgba(248,239,225,0.98)_100%)] shadow-[0_30px_100px_rgba(15,23,42,0.4)]"
               >
-                <div className="bg-gradient-to-r from-purple-900/40 to-indigo-900/40 px-5 py-3 flex justify-between items-center border-b border-white/10">
-                  <div className="flex items-center gap-2">
-                    <div className="p-1.5 bg-purple-500/20 rounded-lg text-purple-400">
-                      <MessageSquare size={16} />
-                    </div>
-                    <h2 className="text-lg font-bold text-white">
+                <div className="flex items-center justify-between gap-3 border-b border-stone-200/80 bg-[#fbf7ef] px-4 py-4 sm:px-6">
+                  <div className="space-y-1">
+                    <p className="text-[10px] uppercase tracking-[0.35em] text-slate-500">Complaint letter</p>
+                    <h2 className="text-xl font-bold tracking-tight text-slate-900 sm:text-2xl">
                       Submit a Complaint
                     </h2>
+                    <p className="text-xs text-slate-500">
+                      Write the issue in the same format used across user and admin complaint screens.
+                    </p>
                   </div>
-                  <button 
+                  <button
                     type="button"
                     onClick={() => setOpen(false)}
-                    className="p-1.5 hover:bg-white/10 rounded-full transition-colors text-slate-400 hover:text-white"
+                    className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-stone-300 bg-white text-slate-600 transition hover:bg-stone-50 hover:text-slate-900"
                   >
                     <X size={18} />
                   </button>
                 </div>
 
-                <form onSubmit={handleSubmit} className="p-4 sm:p-5 space-y-3 sm:space-y-4 overflow-y-auto max-h-[80vh]">
-                  <div className="space-y-1.5">
-                    <label className="text-xs sm:text-sm font-medium text-slate-400 flex items-center gap-2">
-                      <Tag size={14} /> Complaint Title
-                    </label>
-                    <input
-                      type="text"
-                      placeholder="e.g., WiFi not working in Room 102"
-                      className="w-full p-2.5 sm:p-3 rounded-xl bg-[#020617] border border-white/10 text-white placeholder-slate-600 focus:outline-none focus:border-purple-500 transition-all focus:ring-1 focus:ring-purple-500/50 text-sm sm:text-base"
-                      value={title}
-                      maxLength={TITLE_MAX_CHARS}
-                      onChange={(e) => setTitle(e.target.value)}
-                    />
-                    <p className="text-[10px] text-slate-500 text-right font-mono">
-                      {title.length}/{TITLE_MAX_CHARS}
-                    </p>
-                  </div>
+                <form onSubmit={handleSubmit} className="max-h-[80vh] overflow-y-auto px-4 py-5 sm:px-6 sm:py-6">
+                  <div className="space-y-6 text-slate-900">
+                    <section className="grid gap-6 lg:grid-cols-[1.2fr_0.8fr]">
+                      <div className="space-y-4">
+                        <div className="space-y-2">
+                          <p className="text-xs uppercase tracking-[0.32em] text-slate-500">To</p>
+                          <div className="rounded-2xl border border-stone-200 bg-white/70 px-4 py-3 text-sm text-slate-700">
+                            Complaint Resolution Desk
+                          </div>
+                        </div>
 
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <div className="space-y-1.5">
-                      <label className="text-xs sm:text-sm font-medium text-slate-400 flex items-center gap-2">
-                        <Tag size={14} /> Category
-                      </label>
-                      <input
-                        type="text"
-                        placeholder="Hostel, Food, etc."
-                        maxLength={30}
-                        className="w-full p-2.5 sm:p-3 rounded-xl bg-[#020617] border border-white/10 text-white placeholder-slate-600 focus:outline-none focus:border-purple-500 transition-all focus:ring-1 focus:ring-purple-500/50 text-sm sm:text-base"
-                        value={category}
-                        onChange={(e) => setCategory(e.target.value)}
-                      />
-                    </div>
-                    <div className="space-y-1.5">
-                      <label className="text-xs sm:text-sm font-medium text-slate-400 flex items-center gap-2">
-                        <Phone size={14} /> Mobile Number
-                      </label>
-                      <input
-                        type="tel"
-                        placeholder="10-digit number"
-                        className="w-full p-2.5 sm:p-3 rounded-xl bg-[#020617] border border-white/10 text-white placeholder-slate-600 focus:outline-none focus:border-purple-500 transition-all focus:ring-1 focus:ring-purple-500/50 text-sm sm:text-base"
-                        value={mobile}
-                        onChange={(e) => setMobile(e.target.value.replace(/\D/g, "").slice(0, 10))}
-                      />
-                    </div>
-                  </div>
+                        <div className="grid gap-4 sm:grid-cols-2">
+                          <div className="space-y-2">
+                            <label className="flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.24em] text-slate-500">
+                              <Tag size={13} /> Complaint Title
+                            </label>
+                            <input
+                              type="text"
+                              placeholder="e.g., WiFi not working in Room 102"
+                              className="w-full rounded-2xl border border-stone-300 bg-white px-4 py-3 text-sm text-slate-900 outline-none transition focus:border-amber-400"
+                              value={title}
+                              maxLength={TITLE_MAX_CHARS}
+                              onChange={(e) => setTitle(e.target.value)}
+                            />
+                            <p className="text-right text-[11px] text-slate-500">
+                              {title.length}/{TITLE_MAX_CHARS}
+                            </p>
+                          </div>
 
-                  <div className="space-y-1.5">
-                    <label className="text-xs sm:text-sm font-medium text-slate-400 flex items-center gap-2">
-                      <AlertCircle size={14} /> Description
-                    </label>
-                    <textarea
-                      placeholder="Detailed description of your issue..."
-                      className="w-full p-2.5 sm:p-3 rounded-xl bg-[#020617] border border-white/10 text-white placeholder-slate-600 focus:outline-none focus:border-purple-500 transition-all focus:ring-1 focus:ring-purple-500/50 resize-none text-sm sm:text-base"
-                      rows={4}
-                      value={description}
-                      onChange={(e) => {
-                        const nextValue = e.target.value;
-                        if (getWordCount(nextValue) <= DESCRIPTION_MAX_WORDS) {
-                          setDescription(nextValue);
-                        }
-                      }}
-                    />
-                    <p className="text-[10px] text-slate-500 text-right font-mono">
-                      {getWordCount(description)}/{DESCRIPTION_MAX_WORDS} words
-                    </p>
-                  </div>
+                          <div className="space-y-2">
+                            <label className="flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.24em] text-slate-500">
+                              <Tag size={13} /> Category
+                            </label>
+                            <input
+                              type="text"
+                              placeholder="Hostel, Food, Electricity..."
+                              className="w-full rounded-2xl border border-stone-300 bg-white px-4 py-3 text-sm text-slate-900 outline-none transition focus:border-amber-400"
+                              value={category}
+                              onChange={(e) => setCategory(e.target.value)}
+                            />
+                          </div>
+                        </div>
 
-                  <div className="space-y-1.5">
-                    <label className="text-xs sm:text-sm font-medium text-slate-400 flex items-center gap-2">
-                      Priority Level
-                    </label>
-                    <div className="grid grid-cols-3 gap-2 sm:gap-3">
-                      {["low", "medium", "high"].map((p) => (
-                        <button
-                          key={p}
-                          type="button"
-                          onClick={() => setPriority(p)}
-                          className={`py-2 px-2 sm:px-3 rounded-lg border transition-all text-[10px] sm:text-xs font-bold capitalize ${
-                            priority === p
-                              ? p === "low" ? "bg-green-500/20 border-green-500 text-green-400" :
-                                p === "medium" ? "bg-yellow-500/20 border-yellow-500 text-yellow-400" :
-                                "bg-red-500/20 border-red-500 text-red-400"
-                              : "bg-[#020617] border-white/10 text-slate-500 hover:border-white/20"
-                          }`}
-                        >
-                          {p}
-                        </button>
-                      ))}
-                    </div>
-                  </div>
+                        <div className="space-y-2">
+                          <label className="flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.24em] text-slate-500">
+                            <AlertCircle size={13} /> Complaint Body
+                          </label>
+                          <textarea
+                            placeholder="Describe the issue in formal letter style with all relevant details."
+                            className="w-full rounded-2xl border border-stone-300 bg-white px-4 py-3 text-sm leading-7 text-slate-900 outline-none transition focus:border-amber-400"
+                            rows={10}
+                            value={description}
+                            onChange={(e) => {
+                              const nextValue = e.target.value;
+                              if (getWordCount(nextValue) <= DESCRIPTION_MAX_WORDS) {
+                                setDescription(nextValue);
+                              }
+                            }}
+                          />
+                          <p className="text-right text-[11px] text-slate-500">
+                            {getWordCount(description)}/{DESCRIPTION_MAX_WORDS} words
+                          </p>
+                        </div>
+                      </div>
 
-                  <div className="flex gap-3 pt-2 border-t border-white/5">
-                    <button
-                      type="button"
-                      onClick={() => setOpen(false)}
-                      className="flex-1 py-2.5 sm:py-3 rounded-xl bg-white/5 hover:bg-white/10 text-white font-semibold transition-all text-sm sm:text-base"
-                    >
-                      Discard
-                    </button>
+                      <div className="space-y-4">
+                        <div className="space-y-2">
+                          <p className="text-xs uppercase tracking-[0.32em] text-slate-500">From</p>
+                          <div className="rounded-2xl border border-stone-200 bg-white/70 px-4 py-3 text-sm text-slate-700">
+                            Current user
+                          </div>
+                        </div>
 
-                    <button
-                      type="submit"
-                      disabled={submitting}
-                      className="flex-1 py-2.5 sm:py-3 rounded-xl bg-gradient-to-r from-purple-500 to-indigo-600 hover:from-purple-600 hover:to-indigo-700 font-bold text-white transition-all shadow-lg shadow-purple-500/20 flex items-center justify-center gap-2 text-sm sm:text-base disabled:opacity-60 disabled:cursor-not-allowed"
-                    >
-                      <Send size={16} className="sm:size-6" />
-                      {submitting ? "Submitting..." : "Submit"}
-                    </button>
+                        <div className="space-y-2">
+                          <label className="flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.24em] text-slate-500">
+                            <Phone size={13} /> Mobile Number
+                          </label>
+                          <input
+                            type="tel"
+                            placeholder="10-digit number"
+                            className="w-full rounded-2xl border border-stone-300 bg-white px-4 py-3 text-sm text-slate-900 outline-none transition focus:border-amber-400"
+                            value={mobile}
+                            onChange={(e) => setMobile(e.target.value.replace(/\D/g, "").slice(0, 10))}
+                          />
+                        </div>
+
+                        <div className="space-y-2">
+                          <p className="text-xs uppercase tracking-[0.32em] text-slate-500">Priority</p>
+                          <div className="grid grid-cols-3 gap-2">
+                            {(["low", "medium", "high"] as const).map((level) => (
+                              <button
+                                key={level}
+                                type="button"
+                                onClick={() => setPriority(level)}
+                                className={`rounded-2xl border px-3 py-3 text-sm font-semibold capitalize transition ${
+                                  priority === level
+                                    ? level === "low"
+                                      ? "border-emerald-400 bg-emerald-50 text-emerald-700"
+                                      : level === "medium"
+                                        ? "border-amber-400 bg-amber-50 text-amber-700"
+                                        : "border-rose-400 bg-rose-50 text-rose-700"
+                                    : "border-stone-200 bg-white text-slate-700 hover:border-slate-300"
+                                }`}
+                              >
+                                {level}
+                              </button>
+                            ))}
+                          </div>
+                        </div>
+
+                        <div className="rounded-2xl border border-dashed border-stone-300 bg-white/50 p-4 text-sm leading-7 text-slate-700">
+                          Dear Complaint Officer,
+                          <br />
+                          <br />
+                          I am writing to formally raise the following complaint. Please review the
+                          matter and take the necessary action at the earliest.
+                        </div>
+                      </div>
+                    </section>
+
+                    <section className="flex flex-col gap-3 border-t border-stone-200 pt-5 sm:flex-row sm:justify-end">
+                      <button
+                        type="button"
+                        onClick={() => setOpen(false)}
+                        className="inline-flex min-h-11 items-center justify-center rounded-2xl border border-stone-300 bg-white px-5 py-3 text-sm font-semibold text-slate-700 transition hover:bg-stone-50"
+                      >
+                        Cancel
+                      </button>
+
+                      <button
+                        type="submit"
+                        disabled={submitting}
+                        className="inline-flex min-h-11 items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-amber-500 to-orange-600 px-5 py-3 text-sm font-semibold text-white shadow-lg shadow-orange-500/20 transition hover:from-amber-600 hover:to-orange-700 disabled:cursor-not-allowed disabled:opacity-60"
+                      >
+                        <Send size={16} />
+                        {submitting ? "Submitting..." : "Submit complaint"}
+                      </button>
+                    </section>
                   </div>
                 </form>
               </motion.div>
             </div>
           )}
         </AnimatePresence>,
-        document.body
+        document.body,
       )}
     </>
   );

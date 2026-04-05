@@ -218,8 +218,8 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 **Santhoshkkumar**  
 *Aspiring Full Stack Developer*
 
-- GitHub: [@yourusername](https://github.com/yourusername)
-- LinkedIn: [Your LinkedIn](https://linkedin.com/in/yourprofile)
+- GitHub: [@yourusername](https://github.com/Santhoshkkumart)
+- LinkedIn: [Your LinkedIn](www.linkedin.com/in/santhoshkkumar-a-190078325)
 
 ---
 

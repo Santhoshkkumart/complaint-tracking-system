@@ -88,7 +88,7 @@ function ComplaintEditPage() {
   return (
     <ComplaintLetterFrame
       title="Edit Complaint"
-      subtitle="Rewrite the complaint on a dedicated page instead of a modal dialog."
+      subtitle="Update an existing complaint from the same formal letter-style page used for new submissions."
       actions={
         <button
           type="button"
@@ -129,6 +129,7 @@ function ComplaintEditPage() {
                     value={title}
                     maxLength={TITLE_MAX_CHARS}
                     onChange={(event) => setTitle(event.target.value)}
+                    placeholder="e.g., WiFi not working in Room 102"
                     className="w-full rounded-2xl border border-stone-300 bg-white px-4 py-3 text-sm text-slate-900 outline-none transition focus:border-amber-400"
                   />
                   <p className="text-right text-[11px] text-slate-500">
@@ -144,6 +145,7 @@ function ComplaintEditPage() {
                     type="text"
                     value={category}
                     onChange={(event) => setCategory(event.target.value)}
+                    placeholder="Hostel, Food, Electricity..."
                     className="w-full rounded-2xl border border-stone-300 bg-white px-4 py-3 text-sm text-slate-900 outline-none transition focus:border-amber-400"
                   />
                 </div>
@@ -162,6 +164,7 @@ function ComplaintEditPage() {
                     }
                   }}
                   rows={10}
+                  placeholder="Describe the issue in formal letter style with all relevant details."
                   className="w-full rounded-2xl border border-stone-300 bg-white px-4 py-3 text-sm leading-7 text-slate-900 outline-none transition focus:border-amber-400"
                 />
                 <p className="text-right text-[11px] text-slate-500">
@@ -188,6 +191,7 @@ function ComplaintEditPage() {
                   onChange={(event) =>
                     setMobile(event.target.value.replace(/\D/g, "").slice(0, 10))
                   }
+                  placeholder="10-digit number"
                   className="w-full rounded-2xl border border-stone-300 bg-white px-4 py-3 text-sm text-slate-900 outline-none transition focus:border-amber-400"
                 />
               </div>
@@ -217,8 +221,11 @@ function ComplaintEditPage() {
               </div>
 
               <div className="rounded-2xl border border-dashed border-stone-300 bg-white/50 p-4 text-sm leading-7 text-slate-700">
-                Use this page to adjust the wording, category, contact number, or priority before
-                saving the complaint.
+                Dear Complaint Officer,
+                <br />
+                <br />
+                I am writing to formally update the following complaint. Please review the revised
+                details and save the changes.
               </div>
             </div>
           </section>
