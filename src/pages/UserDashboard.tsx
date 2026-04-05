@@ -1,44 +1,16 @@
-import { useState } from "react";
 import { signOut } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
 
 import { auth } from "../services/firebase";
 import { useAuth } from "../context/AuthContext";
-import { Complaint, useComplaints } from "../hooks/useComplaints";
-import AddComplaintDialog from "../components/AddComplaintDialog";
-import EditComplaintDialog from "../components/EditComplaintDialog";
+import { useComplaints } from "../hooks/useComplaints";
 import { BeamsBackground } from "../components/ui/beams-background";
 import ComplaintContributorsTable from "@/components/ui/ruixen-contributors-table";
 
 function UserDashboard() {
   const { user } = useAuth();
   const navigate = useNavigate();
-  const { complaints, loading, addComplaint, updateComplaint } = useComplaints(user?.uid);
-  const [editingComplaint, setEditingComplaint] = useState<Complaint | null>(null);
-
-  const handleAddComplaint = async (complaintData: any) => {
-    if (!user?.email) {
-      return;
-    }
-
-    await addComplaint(complaintData, { uid: user.uid, email: user.email });
-  };
-
-  const handleEditComplaint = async (updated: Complaint) => {
-    try {
-      await updateComplaint(updated.id, {
-        title: updated.title,
-        category: updated.category,
-        description: updated.description,
-        priority: updated.priority,
-        mobile: updated.mobile,
-      });
-      setEditingComplaint(null);
-    } catch (error: any) {
-      console.error(error);
-      alert(error?.message || "Error updating complaint");
-    }
-  };
+  const { complaints, loading } = useComplaints(user?.uid);
 
   if (loading) {
     return (
@@ -62,7 +34,13 @@ function UserDashboard() {
             </div>
 
             <div className="flex flex-wrap items-center gap-3 sm:flex-nowrap sm:gap-4">
-              <AddComplaintDialog onAdd={handleAddComplaint} />
+              <button
+                type="button"
+                onClick={() => navigate("/complaints/new")}
+                className="inline-flex min-h-10 items-center justify-center rounded-lg bg-gradient-to-r from-purple-500 to-indigo-600 px-4 py-2 text-xs font-bold text-white shadow-lg shadow-purple-500/20 transition-all hover:scale-105 hover:from-purple-600 hover:to-indigo-700 active:scale-95"
+              >
+                Add a Complaint
+              </button>
 
               <button
                 onClick={() => {
@@ -88,18 +66,11 @@ function UserDashboard() {
               <ComplaintContributorsTable
                 complaints={complaints}
                 mode="user"
-                onEdit={(complaint) => setEditingComplaint(complaint)}
+                onEdit={(complaint) => navigate(`/complaints/${complaint.id}/edit`, { state: { complaint } })}
               />
             </div>
           </div>
         </main>
-
-        <EditComplaintDialog
-          complaint={editingComplaint}
-          open={!!editingComplaint}
-          onClose={() => setEditingComplaint(null)}
-          onSave={handleEditComplaint}
-        />
       </>
     </BeamsBackground>
   );

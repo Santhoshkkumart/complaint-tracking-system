@@ -6,8 +6,6 @@ import { AlertCircle, CheckCircle, Clock, FileText } from "lucide-react";
 import { auth } from "../services/firebase";
 import { useAuth } from "../context/AuthContext";
 import { Complaint, useComplaints } from "../hooks/useComplaints";
-import AddComplaintDialog from "../components/AddComplaintDialog";
-import ComplaintDetail from "../components/ComplaintDetail";
 import ComplaintAnalysisCard from "../components/ComplaintAnalysisCard";
 import AdminNotificationBox from "../components/AdminNotificationBox";
 import { BeamsBackground } from "../components/ui/beams-background";
@@ -17,13 +15,10 @@ import ComplaintContributorsTable from "@/components/ui/ruixen-contributors-tabl
 function Dashboard() {
   const { user } = useAuth();
   const navigate = useNavigate();
-  const { complaints, loading, addComplaint, updateComplaintStatus, deleteComplaint } =
-    useComplaints(user?.uid, true);
+  const { complaints, loading, updateComplaintStatus, deleteComplaint } = useComplaints(user?.uid, true);
 
-  const [selectedComplaint, setSelectedComplaint] = useState<Complaint | null>(null);
   const [statusFilter, setStatusFilter] = useState("all");
   const [notifications, setNotifications] = useState<Complaint[]>([]);
-  const previewTimeoutRef = useRef<number | null>(null);
   const hydratedComplaintIdsRef = useRef<Set<string> | null>(null);
 
   const filterOptions = [
@@ -85,14 +80,6 @@ function Dashboard() {
     hydratedComplaintIdsRef.current = currentIds;
   }, [complaints, loading]);
 
-  const handleAdd = async (complaintData: any) => {
-    if (!user?.email) {
-      return;
-    }
-
-    await addComplaint(complaintData, { uid: user.uid, email: user.email });
-  };
-
   const handleStatusChange = async (id: string, status: Complaint["status"]) => {
     try {
       await updateComplaintStatus(id, status);
@@ -113,34 +100,10 @@ function Dashboard() {
     }
   };
 
-  const handlePreview = (complaint: Complaint, transient = false) => {
-    setSelectedComplaint(complaint);
+  const handlePreview = (complaint: Complaint) => {
+    navigate(`/complaints/${complaint.id}`, { state: { complaint } });
     setNotifications((current) => current.filter((item) => item.id !== complaint.id));
-
-    if (!transient) {
-      if (previewTimeoutRef.current) {
-        window.clearTimeout(previewTimeoutRef.current);
-        previewTimeoutRef.current = null;
-      }
-      return;
-    }
-
-    if (previewTimeoutRef.current) {
-      window.clearTimeout(previewTimeoutRef.current);
-    }
-
-    previewTimeoutRef.current = window.setTimeout(() => {
-      setSelectedComplaint(null);
-    }, 2500);
   };
-
-  useEffect(() => {
-    return () => {
-      if (previewTimeoutRef.current) {
-        window.clearTimeout(previewTimeoutRef.current);
-      }
-    };
-  }, []);
 
   const filteredComplaints = complaints.filter(
     (complaint) => statusFilter === "all" || complaint.status === statusFilter,
@@ -192,7 +155,14 @@ function Dashboard() {
                 </button>
               </div>
               <div className="order-1 sm:order-2">
-                <AddComplaintDialog onAdd={handleAdd} />
+                <button
+                  type="button"
+                  onClick={() => navigate("/complaints/new")}
+                  className="relative z-[50] inline-flex min-h-10 items-center justify-center gap-2 rounded-lg bg-gradient-to-r from-purple-500 to-indigo-600 px-4 py-2 text-xs font-bold text-white shadow-lg shadow-purple-500/20 transition-all hover:scale-105 hover:from-purple-600 hover:to-indigo-700 active:scale-95"
+                >
+                  <FileText size={14} />
+                  Add a Complaint
+                </button>
               </div>
             </div>
           </div>
@@ -231,7 +201,7 @@ function Dashboard() {
 
             <AdminNotificationBox
               notifications={notifications}
-              onView={(complaint) => handlePreview(complaint, false)}
+              onView={handlePreview}
               onDismiss={(id) => setNotifications((current) => current.filter((item) => item.id !== id))}
               onClearAll={() => setNotifications([])}
             />
@@ -250,19 +220,12 @@ function Dashboard() {
             <ComplaintContributorsTable
               complaints={filteredComplaints}
               mode="admin"
-              onView={(complaint) => handlePreview(complaint, false)}
+              onView={handlePreview}
               onResolve={(id) => handleStatusChange(id, "resolved")}
               onDelete={handleDelete}
             />
           </div>
         </main>
-
-        <ComplaintDetail
-          complaint={selectedComplaint}
-          open={!!selectedComplaint}
-          onClose={() => setSelectedComplaint(null)}
-          onStatusChange={handleStatusChange}
-        />
       </>
     </BeamsBackground>
   );

@@ -5,6 +5,9 @@ import ProtectedRoute from "./components/ProtectedRoute";
 const Login = lazy(() => import("./pages/login"));
 const Dashboard = lazy(() => import("./pages/dashboard"));
 const UserDashboard = lazy(() => import("./pages/UserDashboard"));
+const ComplaintCreatePage = lazy(() => import("./pages/ComplaintCreatePage"));
+const ComplaintEditPage = lazy(() => import("./pages/ComplaintEditPage"));
+const ComplaintDetailPage = lazy(() => import("./pages/ComplaintDetailPage"));
 const GradientBackground = lazy(() => import("./components/ui/gradient-background").then((module) => ({
   default: module.GradientBackground,
 })));
@@ -55,6 +58,30 @@ function App() {
               element={
                 <ProtectedRoute>
                   <UserDashboard />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/complaints/new"
+              element={
+                <ProtectedRoute>
+                  <ComplaintCreatePage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/complaints/:id/edit"
+              element={
+                <ProtectedRoute>
+                  <ComplaintEditPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/complaints/:id"
+              element={
+                <ProtectedRoute requireAdmin={true}>
+                  <ComplaintDetailPage />
                 </ProtectedRoute>
               }
             />

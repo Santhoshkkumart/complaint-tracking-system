@@ -8,6 +8,10 @@ build
 # project docs
 AGENTS.md
 codebase.md
+GEMINI.md
+GEMINI_template.md
+CONTINUE_PROJECT_HOOK.md
+project.md
 
 # environment variables
 .env

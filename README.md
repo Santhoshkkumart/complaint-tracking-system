@@ -2,6 +2,17 @@
 
 A modern web-based complaint management system that allows users to submit, track, and manage complaints efficiently. Built using React, Tailwind CSS, and Firebase, this platform provides a seamless and real-time experience for both users and administrators.
 
+## Local Helper Files
+
+Some AI/workflow helper files are intentionally kept out of Git so they stay local to your machine:
+
+- `GEMINI.md`
+- `GEMINI_template.md`
+- `CONTINUE_PROJECT_HOOK.md`
+- `project.md`
+
+They are listed in `.gitignore`, so they will not be included when you push the repo.
+
 ## 📌 Features
 
 - 📝 Submit complaints with detailed description
