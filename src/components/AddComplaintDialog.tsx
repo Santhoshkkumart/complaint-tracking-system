@@ -82,7 +82,7 @@ function AddComplaintDialog({ onAdd }: { onAdd: (data: any) => Promise<void> | v
         aria-label="Open complaint form"
       >
         <MessageSquare size={14} />
-        Submit Complaint
+        Add a Complaint
       </button>
 
       {createPortal(
