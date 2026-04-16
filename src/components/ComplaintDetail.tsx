@@ -5,6 +5,7 @@ type ComplaintDetailProps = {
   open: boolean;
   onClose: () => void;
   onStatusChange?: (id: string, status: string) => Promise<void> | void;
+  canResolve?: boolean;
 };
 
 const formatCreatedAt = (createdAt: any) => {
@@ -17,7 +18,7 @@ const formatCreatedAt = (createdAt: any) => {
   return Number.isNaN(date.getTime()) ? "Pending" : date.toLocaleString();
 };
 
-function ComplaintDetail({ complaint, open, onClose, onStatusChange }: ComplaintDetailProps) {
+function ComplaintDetail({ complaint, open, onClose, onStatusChange, canResolve = false }: ComplaintDetailProps) {
   if (!open || !complaint) return null;
 
   const isResolvedOrClosed = complaint.status === "resolved" || complaint.status === "closed";
@@ -139,7 +140,7 @@ function ComplaintDetail({ complaint, open, onClose, onStatusChange }: Complaint
             </section>
 
             <section className="flex flex-col gap-3 border-t border-stone-200 pt-5 sm:flex-row sm:justify-end">
-              {!isResolvedOrClosed && onStatusChange && (
+              {!isResolvedOrClosed && canResolve && onStatusChange && (
                 <button
                   type="button"
                   onClick={() => {

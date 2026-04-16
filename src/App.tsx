@@ -80,7 +80,7 @@ function App() {
             <Route
               path="/complaints/:id"
               element={
-                <ProtectedRoute requireAdmin={true}>
+                <ProtectedRoute>
                   <ComplaintDetailPage />
                 </ProtectedRoute>
               }

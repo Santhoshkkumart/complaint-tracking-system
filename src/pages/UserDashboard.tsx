@@ -66,6 +66,7 @@ function UserDashboard() {
               <ComplaintContributorsTable
                 complaints={complaints}
                 mode="user"
+                onView={(complaint) => navigate(`/complaints/${complaint.id}`, { state: { complaint } })}
                 onEdit={(complaint) => navigate(`/complaints/${complaint.id}/edit`, { state: { complaint } })}
               />
             </div>
